@@ -15,8 +15,8 @@ class NaiveBayesClassifier:
 
         self.set_size = 0
 
-        self.P_S1 = 0
-        self.P_S2 = 0
+        self.P1 = 0
+        self.P2 = 0
 
     def fit(self, training_set, labels):
         self.labels = labels
@@ -35,6 +35,10 @@ class NaiveBayesClassifier:
             index += 1
         self.set_size = len(self.training_set)
 
+        prob_positive = labels.value_counts()
+        self.P2 = prob_positive[0] / (prob_positive[0] + prob_positive[1])
+        self.P1 = prob_positive[1] / (prob_positive[0] + prob_positive[1])
+
     def test(self, testing_set):
         self.testing_set = testing_set
         # return list of 0 and 1
@@ -42,16 +46,28 @@ class NaiveBayesClassifier:
         for el in testing_set:
             p_s1, p_s2 = self._predict(el)
 
+            if p_s1 > 0 > p_s2:
+                ret_val.append(1)
+                continue
+
+            elif p_s2 > 0 > p_s1:
+                ret_val.append(0)
+                continue
+
             p_s1 = abs(np.exp(p_s1))
             p_s2 = abs(np.exp(p_s2))
-            if p_s1 > p_s2:  # always
+            if p_s1 > p_s2:
                 ret_val.append(1)
             else:
                 ret_val.append(0)
         return ret_val
 
     def _predict(self, single_comment):
-        # returns 2 float values < 1 and > 0
+        """
+        Predicts class for single comment
+        :param single_comment: one comment from set
+        :return: probability that it is spam and probability that it is ham
+        """
         prob_sum_pos = 0
         prob_sum_neg = 0
         for word in single_comment.strip().split(' '):
@@ -86,9 +102,7 @@ class NaiveBayesClassifier:
         return ret_val
 
     def _prob_positive(self):
-        ret_val = len(self.set_positives) / self.set_size
-        return ret_val
+        return self.P1
 
     def _prob_negative(self):
-        ret_val = len(self.set_negatives) / self.set_size
-        return ret_val
+        return self.P2
