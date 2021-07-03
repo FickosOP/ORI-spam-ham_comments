@@ -1,6 +1,5 @@
 import os
 import string
-# import nltk
 import time
 from NaiveBayesClassifier import *
 from scipy.sparse import csr_matrix
@@ -177,6 +176,12 @@ def calculate_idf(word, comments):
 
 
 def predict_input(input_text, all_ds_words):
+    """
+    Classifies input comment as SPAM or HAM using TF-IDF + RFC
+    :param input_text: comment entered by user
+    :param all_ds_words: Isolated words from all comments
+    :return:
+    """
     parsed_comment = ""
     for word in input_text.split(' '):
         parsed = parse_word(word)
@@ -192,6 +197,17 @@ def predict_input(input_text, all_ds_words):
 
 
 def create_confusion_matrix(results, reals):
+    """
+    Creates dictionary that represents confusion matrix and prints out results
+    Counts TP, TN, FP, FN
+    TP - number of correctly predicted spam comments
+    TN - number of correctly predicted ham comments
+    FP - number of ham comments predicted as spam
+    FN - number of spam comments predicted as ham
+    :param results: List of predicted values
+    :param reals: List of actual values
+    :return: Confusion matrix as dictionary
+    """
     conf_mat = {}
     tp = 0
     tn = 0
@@ -219,9 +235,9 @@ def create_confusion_matrix(results, reals):
     conf_mat["TN"] = tn
     conf_mat["FP"] = fp
     conf_mat["FN"] = fn
-    print("{:70}{:10}{:10}".format("Actual/Predicted", "Spam", "Ham"))
-    print("{:70}{:4}{:8}".format("Spam", tp, fn))
-    print("{:70}{:4}{:8}".format("Ham", fp, tn))
+    print("{:40}{:10}{:10}".format("Actual/Predicted", "Spam", "Ham"))
+    print("{:40}{:4}{:8}".format("Spam", tp, fn))
+    print("{:40}{:4}{:8}".format("Ham", fp, tn))
 
     return conf_mat
 
@@ -243,9 +259,7 @@ if __name__ == '__main__':
 
     RFC = RandomForestClassifier(n_estimators=80, random_state=0)
 
-    # clf = pipeline.Pipeline([
-    #     ('tfidf_vectorizer', feature_extraction.text.TfidfVectorizer(lowercase=True)),
-    #     ('rf_classifier', RFC)])
+    # -- BAG OF WORDS -- #
 
     RFC.fit(d_train_bof, Y_train)
 
@@ -278,9 +292,12 @@ if __name__ == '__main__':
 
     confusion_matrix_nb = create_confusion_matrix(nb_prediction, Y_test)
 
-    print("Enter a comment to see if it is spam or ham: ")
-    input_comment = input()
-    if predict_input(input_comment, all_words):
-        print("SPAM")
-    else:
-        print("HAM")
+    while True:
+        print("Enter a comment to see if it is spam or ham: ")
+        input_comment = input()
+        if input_comment == 'X':
+            exit(0)
+        if predict_input(input_comment, all_words):
+            print("SPAM")
+        else:
+            print("HAM")
