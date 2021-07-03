@@ -25,8 +25,6 @@ if __name__ == '__main__':
 
     bag_of_words_vector = CountVectorizer()
 
-    dv = bag_of_words_vector.fit_transform(df['CONTENT'])
-
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
 
     train_set_bof = bag_of_words_vector.fit_transform(X_train['CONTENT'])

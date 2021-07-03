@@ -1,6 +1,5 @@
 import os
 import string
-# import nltk
 import time
 from NaiveBayesClassifier import *
 from scipy.sparse import csr_matrix
@@ -236,9 +235,9 @@ def create_confusion_matrix(results, reals):
     conf_mat["TN"] = tn
     conf_mat["FP"] = fp
     conf_mat["FN"] = fn
-    print("{:70}{:10}{:10}".format("Actual/Predicted", "Spam", "Ham"))
-    print("{:70}{:4}{:8}".format("Spam", tp, fn))
-    print("{:70}{:4}{:8}".format("Ham", fp, tn))
+    print("{:40}{:10}{:10}".format("Actual/Predicted", "Spam", "Ham"))
+    print("{:40}{:4}{:8}".format("Spam", tp, fn))
+    print("{:40}{:4}{:8}".format("Ham", fp, tn))
 
     return conf_mat
 

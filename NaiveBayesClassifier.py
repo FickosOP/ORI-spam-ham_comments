@@ -19,6 +19,12 @@ class NaiveBayesClassifier:
         self.P2 = 0
 
     def fit(self, training_set, labels):
+        """
+        Creating sets of positive and negative comments. Depending on class one comment is tokenized and all tokens
+        are appended to corresponding set
+        :param training_set: List of all comments, prepared for training
+        :param labels: List of labels for each comment(1-SPAM, 0-HAM)
+        """
         self.labels = labels
         # split into pos and neg set
         index = 0
@@ -40,6 +46,11 @@ class NaiveBayesClassifier:
         self.P1 = prob_positive[1] / (prob_positive[0] + prob_positive[1])
 
     def test(self, testing_set):
+        """
+        Predicts class for every comment is set
+        :param testing_set: List of comments
+        :return: List of predicted classes
+        """
         self.testing_set = testing_set
         # return list of 0 and 1
         ret_val = []
@@ -84,18 +95,30 @@ class NaiveBayesClassifier:
         return prob_sum_pos, prob_sum_neg
 
     def _p_in_data(self, word):
+        """
+        :param word: One word from comment
+        :return: Ratio of how many times word appeared in training set and how many words are in training set
+        """
         if self.training_set.count(word) == 0:
             return 1
         ret_val = self.training_set.count(word) / len(self.training_set)
         return ret_val
 
     def _p_in_positive(self, word):
+        """
+        :param word: One word from comment
+        :return: Ratio of how many times word appeared in set of positive comments and how many words are in that set
+        """
         if self.set_positives.count(word) == 0:
             return 0
         ret_val = self.set_positives.count(word) / len(self.set_positives)
         return ret_val
 
     def _p_in_negative(self, word):
+        """
+        :param word: One word from comment
+        :return: Ratio of how many times word appeared in set of negative comments and how many words are in that set
+        """
         if self.set_negatives.count(word) == 0:
             return 0
         ret_val = self.set_negatives.count(word) / len(self.set_negatives)
