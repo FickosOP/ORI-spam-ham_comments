@@ -1,6 +1,6 @@
 import os
 import string
-# import nltk
+import nltk
 import time
 from NaiveBayesClassifier import *
 from scipy.sparse import csr_matrix
@@ -244,6 +244,7 @@ def create_confusion_matrix(results, reals):
 
 
 if __name__ == '__main__':
+    nltk.download('stopwords')
     data_frame, word_count, all_words = load_dataframe()
     X = data_frame.drop('CLASS', axis=1)  # everything but tag
     Y = data_frame['CLASS']  # tags
