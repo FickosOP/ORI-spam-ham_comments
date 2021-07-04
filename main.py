@@ -90,6 +90,8 @@ if __name__ == '__main__':
 
     while True:
         input_comment = input("Enter your comment to see if it is SPAM or HAM: ")
+        if input_comment == 'X':
+            exit(0)
         result_pl1 = pl_1.predict([input_comment])
         print(f"\nTF-IDF + Random forest prediction: \t{'Spam' if result_pl1 == 1 else 'Ham'}")
 

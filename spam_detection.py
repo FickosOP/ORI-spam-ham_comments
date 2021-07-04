@@ -1,5 +1,6 @@
 import os
 import string
+# import nltk
 import time
 from NaiveBayesClassifier import *
 from scipy.sparse import csr_matrix
@@ -88,7 +89,7 @@ def parse_word(word):
 
     if len(sing) < 2:
         return ""
-    # STEMMING IF NEEDED
+    # STEMMING DIDN'T IMPROVE ACCURACY IT JUST SLOWED DOWN TEXT PROCESSING
     return sing
 
 
